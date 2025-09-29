@@ -1,27 +1,8 @@
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
-import { compression } from "vite-plugin-compression"
-import { visualizer } from "rollup-plugin-visualizer"
 
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    react(),
-    compression({
-      algorithm: "gzip",
-      ext: ".gz",
-    }),
-    compression({
-      algorithm: "brotliCompress",
-      ext: ".br",
-    }),
-    mode === "analyze" &&
-      visualizer({
-        filename: "dist/stats.html",
-        open: true,
-        gzipSize: true,
-        brotliSize: true,
-      }),
-  ].filter(Boolean),
+export default defineConfig({
+  plugins: [react()],
   server: {
     port: 3000,
   },
@@ -38,4 +19,4 @@ export default defineConfig(({ mode }) => ({
     },
     chunkSizeWarningLimit: 1000,
   },
-}))
+})

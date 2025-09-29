@@ -21,9 +21,7 @@
     "papaparse": "latest",
     "react": "^19",
     "react-dom": "^19",
-    "rolldown": "latest",
-    "rollup": "latest",
-    "rollup-plugin-visualizer": "latest",
+    "rollup-plugin-visualizer": "6.0.3",
     "sass": "latest",
     "sass-embedded": "latest",
     "sonner": "latest",
@@ -33,7 +31,7 @@
     "tailwindcss-animate": "^1.0.7",
     "terser": "latest",
     "tsx": "latest",
-    "vite-plugin-compression": "latest",
+    "vite-plugin-compression": "0.5.1",
     "yaml": "latest"
   },
   "devDependencies": {
