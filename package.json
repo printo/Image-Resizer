@@ -5,9 +5,6 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
-    "build:analyze": "tsc && vite build --mode analyze",
-    "build:report": "npm run build:analyze && open dist/stats.html",
-    "build:size": "npm run build && npx vite-bundle-analyzer dist",
     "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
@@ -36,6 +33,7 @@
     "tailwindcss-animate": "^1.0.7",
     "terser": "latest",
     "tsx": "latest",
+    "vite-plugin-compression": "latest",
     "yaml": "latest"
   },
   "devDependencies": {
@@ -53,8 +51,6 @@
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
-    "vite": "^4.4.5",
-    "vite-bundle-analyzer": "^0.7.0",
-    "vite-plugin-compression": "^0.5.1"
+    "vite": "^4.4.5"
   }
 }
