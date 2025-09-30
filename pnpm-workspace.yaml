@@ -1,0 +1,5 @@
+ignoredBuiltDependencies:
+  - '@parcel/watcher'
+  - '@vercel/speed-insights'
+  - esbuild
+  - sharp

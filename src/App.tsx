@@ -1,7 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { LoginPage } from "./components/LoginPage"
+import { useAuth } from "./context/AuthContext"
+import { Toaster } from "sonner"
 import { FileImage, Download, AlertCircle, Archive, FileSpreadsheet, Clock, Shield } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { FileUpload } from "./components/FileUpload"
 import { CSVPreview } from "./components/CSVPreview"
 import { ProcessingResults } from "./components/ProcessingResults"
@@ -11,7 +15,8 @@ import { ZipGenerator, type ZipGenerationProgress, downloadBlob, generateDownloa
 import { formatTime } from "./utils/timeEstimator"
 import { tabKeepAlive } from "./utils/tabKeepAlive"
 
-function App() {
+function AppContent() {
+  const { isAuthenticated, login, logout } = useAuth();
   const [zipFile, setZipFile] = useState<File | null>(null)
   const [csvFile, setCsvFile] = useState<File | null>(null)
   const [csvParseResult, setCsvParseResult] = useState<CSVParseResult | null>(null)
@@ -46,6 +51,10 @@ function App() {
       setCsvParseResult(null)
     }
   }, [csvFile])
+
+  if (!isAuthenticated) {
+    return <LoginPage onLoginSuccess={login} />;
+  }
 
   const handleProcessImages = async () => {
     if (!zipFile || !csvFile) {
@@ -130,16 +139,25 @@ function App() {
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="flex items-center justify-center mb-4">
-              <FileImage className="w-12 h-12 text-blue-600 mr-3" />
-              <h1 className="text-4xl font-bold text-gray-900">Image Resizer</h1>
-              {tabProtectionActive && (
-                <div className="ml-3 flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
-                  <Shield className="w-3 h-3 mr-1" />
-                  Protected
-                </div>
-              )}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex-1 flex items-center justify-center">
+                <FileImage className="w-12 h-12 text-blue-600 mr-3" />
+                <h1 className="text-4xl font-bold text-blue-600">Image Resizer</h1>
+                {tabProtectionActive && (
+                  <div className="ml-3 flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">
+                    <Shield className="w-3 h-3 mr-1" />
+                    Protected
+                  </div>
+                )}
+              </div>
+              <Button
+                onClick={logout}
+                variant="outline"
+                className="text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
+              >
+                Sign out
+              </Button>
             </div>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
               Upload a ZIP file containing images and a CSV file with resize specifications. We'll resize your images to
@@ -168,7 +186,7 @@ function App() {
                 onFileSelect={setCsvFile}
                 selectedFile={csvFile}
                 title="Upload CSV File"
-                description="CSV with: filename, length (inches), width (inches)"
+                description="CSV with: filename, length (in), width (in)"
                 icon={<FileSpreadsheet className="w-12 h-12 text-gray-400" />}
                 color="green"
               />
@@ -176,6 +194,27 @@ function App() {
 
             <div className="mb-8">
               <CSVPreview parseResult={csvParseResult} isLoading={isCsvParsing} />
+            </div>
+
+            {/* Process Button */}
+            <div className="text-center mb-6">
+              <button
+                onClick={handleProcessImages}
+                disabled={!zipFile || !csvFile || !csvParseResult?.success || isProcessing}
+                className="inline-flex items-center px-8 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+              >
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-5 h-5 mr-2" />
+                    Resize Images
+                  </>
+                )}
+              </button>
             </div>
 
             {/* CSV Format Info */}
@@ -209,27 +248,6 @@ function App() {
                 </div>
               </div>
             )}
-
-            {/* Process Button */}
-            <div className="text-center mb-6">
-              <button
-                onClick={handleProcessImages}
-                disabled={!zipFile || !csvFile || !csvParseResult?.success || isProcessing}
-                className="inline-flex items-center px-8 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-              >
-                {isProcessing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-5 h-5 mr-2" />
-                    Resize Images
-                  </>
-                )}
-              </button>
-            </div>
 
             {/* Progress Section */}
             {isProcessing && processingProgress && (
@@ -306,6 +324,15 @@ function App() {
       </div>
     </div>
   )
+}
+
+function App() {
+  return (
+    <>
+      <AppContent />
+      <Toaster />
+    </>
+  );
 }
 
 export default App
