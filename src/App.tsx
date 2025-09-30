@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { LoginPage } from "./components/LoginPage"
-import { useAuth } from "./context/AuthContext"
+import { useAuth } from "@/context/AuthContext"
 import { Toaster } from "sonner"
 import { FileImage, Download, AlertCircle, Archive, FileSpreadsheet, Clock, Shield } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -16,7 +16,7 @@ import { formatTime } from "./utils/timeEstimator"
 import { tabKeepAlive } from "./utils/tabKeepAlive"
 
 function AppContent() {
-  const { isAuthenticated, login, logout } = useAuth();
+  const { isAuthenticated, login, logout } = useAuth()
   const [zipFile, setZipFile] = useState<File | null>(null)
   const [csvFile, setCsvFile] = useState<File | null>(null)
   const [csvParseResult, setCsvParseResult] = useState<CSVParseResult | null>(null)
@@ -53,7 +53,7 @@ function AppContent() {
   }, [csvFile])
 
   if (!isAuthenticated) {
-    return <LoginPage onLoginSuccess={login} />;
+    return <LoginPage onLoginSuccess={login} />
   }
 
   const handleProcessImages = async () => {
@@ -154,7 +154,7 @@ function AppContent() {
               <Button
                 onClick={logout}
                 variant="outline"
-                className="text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300"
+                className="text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300 bg-transparent"
               >
                 Sign out
               </Button>
@@ -332,7 +332,7 @@ function App() {
       <AppContent />
       <Toaster />
     </>
-  );
+  )
 }
 
 export default App

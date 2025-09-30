@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react"
 import { ThemeProvider } from "./theme-provider"
-import { AuthProvider } from "../src/context/AuthContext"
+import { AuthProvider } from "@/context/AuthContext"
 
 export function AppProviders({ children }: { children: ReactNode }) {
   return (
