@@ -125,7 +125,7 @@ function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
   const filenameSet = new Set<string>()
   const duplicates = new Set<string>()
 
-  validRows.forEach((row, index) => {
+  validRows.forEach((row) => {
     if (filenameSet.has(row.filename)) {
       duplicates.add(row.filename)
     } else {

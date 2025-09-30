@@ -130,7 +130,7 @@ export class TabKeepAlive {
     document.addEventListener("visibilitychange", this.visibilityChangeHandler)
   }
 
-  private async handleVisibilityChange(): void {
+  private async handleVisibilityChange(): Promise<void> {
     if (document.hidden) {
       console.log("[v0] Tab became hidden - maintaining keep-alive")
       // Tab became hidden, ensure wake lock is still active
