@@ -147,7 +147,7 @@ function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
 
 export function generateSampleCSV(): string {
   const sampleData = [
-    ["filename", "length", "width"],
+    ["filename", "height", "width"],
     ["photo1.jpg", "8.5", "11"],
     ["image2.png", "5", "7"],
     ["picture3.jpeg", "4", "6"],

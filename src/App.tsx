@@ -154,12 +154,15 @@ function AppContent() {
               <Button
                 onClick={logout}
                 variant="outline"
-                className="text-red-600 hover:bg-red-50 border-red-200 hover:border-red-300 bg-transparent"
+                className="bg-red-600 text-white hover:bg-red-700 border-red-600 hover:border-red-700 hover:text-white"
               >
                 Sign out
               </Button>
+
+
+
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto  text-center">
               Upload a ZIP file containing images and a CSV file with resize specifications. We'll resize your images to
               the exact dimensions at 300 DPI.
             </p>
@@ -222,7 +225,7 @@ function AppContent() {
               <h4 className="font-semibold text-blue-900 mb-2">Requirements:</h4>
               <div className="text-sm text-blue-800">
                 <p className="mb-1">• Column 1: Image filename with extension (e.g., "photo1.jpg") - case sensitive</p>
-                <p className="mb-1">• Column 2: Length in inches (e.g., "8.5")</p>
+                <p className="mb-1">• Column 2: Height in inches (e.g., "8.5")</p>
                 <p className="mb-1">• Column 3: Width in inches (e.g., "11")</p>
                 <p className="mb-1">• ZIP file must contain exact filenames as listed in Column 1</p>
                 <p className="text-xs text-blue-600 mt-2">All images will be resized to 300 DPI • Max 5MB per image</p>
