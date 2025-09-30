@@ -20,7 +20,8 @@
     },
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "sourceMap": true
   },
   "include": ["src", "app", "types"],
   "references": [{ "path": "./tsconfig.node.json" }]
