@@ -95,12 +95,12 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
             <FileImage className="w-12 h-12 text-blue-600 mr-3" />
             <h1 className="text-4xl font-bold text-blue-600">Image Resizer</h1>
           </div>
-          <div className="text-center">
+          {/* <div className="text-center">
             <CardTitle className="text-2xl font-semibold text-gray-800">Welcome Back</CardTitle>
             <CardDescription className="text-gray-600 mt-2">
               Enter your credentials to access the application
             </CardDescription>
-          </div>
+          </div> */}
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -170,6 +170,9 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
                   "Sign in"
                 )}
               </Button>
+              <p className="italic text-gray-400 text-sm text-center  mt-2">
+              Enter your credentials to access the app. If unavailable, contact your reporting manager.
+              </p>
             </form>
           </Form>
         </CardContent>
