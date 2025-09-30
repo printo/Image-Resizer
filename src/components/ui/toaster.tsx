@@ -6,8 +6,8 @@ import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastVi
 
 interface ToastItem {
   id: string
-  title?: string
-  description?: string
+  title?: React.ReactNode
+  description?: React.ReactNode
   action?: React.ReactNode
   // other props are forwarded via the spread
 }
