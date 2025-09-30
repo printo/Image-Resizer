@@ -1,21 +1,15 @@
-'uimport { useToast } from "./use-toast"e client'
+"use client"
 
-import { useToast } from '@/hooks/use-toast'
-import {
-  Toast,
-  ToastClose,
-  ToastDescription,
-  ToastProvider,
-  ToastTitle,
-  ToastViewport,
-} from '@/components/ui/toast'
+import type * as React from "react"
+import { useToast } from "./use-toast"
+import { Toast, ToastClose, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from "./toast"
 
 interface ToastItem {
-  id: string;
-  title?: string;
-  description?: string;
-  action?: React.ReactNode;
-  // Add other properties if there are any
+  id: string
+  title?: string
+  description?: string
+  action?: React.ReactNode
+  // other props are forwarded via the spread
 }
 
 export function Toaster() {
@@ -23,20 +17,16 @@ export function Toaster() {
 
   return (
     <ToastProvider>
-      {toasts.map(function ({ id, title, description, action, ...props }: ToastItem) {
-        return (
-          <Toast key={id} {...props}>
-            <div className="grid gap-1">
-              {title && <ToastTitle>{title}</ToastTitle>}
-              {description && (
-                <ToastDescription>{description}</ToastDescription>
-              )}
-            </div>
-            {action}
-            <ToastClose />
-          </Toast>
-        )
-      })}
+      {toasts.map(({ id, title, description, action, ...props }: ToastItem) => (
+        <Toast key={id} {...(props as any)}>
+          <div className="grid gap-1">
+            {title && <ToastTitle>{title}</ToastTitle>}
+            {description && <ToastDescription>{description}</ToastDescription>}
+          </div>
+          {action}
+          <ToastClose />
+        </Toast>
+      ))}
       <ToastViewport />
     </ToastProvider>
   )

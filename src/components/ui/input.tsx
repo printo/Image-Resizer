@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-type InputProps = Omit<React.ComponentProps<"input">, "children">
+type InputProps = React.ComponentProps<"input"> & { children?: never }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, children: _children, ...props }, ref) => {
