@@ -24,189 +24,6 @@ employee authentication and a professional interface.
 - **Modern UI**: Clean interface with toast notifications and loading states
 - **Responsive Design**: Works seamlessly on various screen sizes
 
-## 🛠️ Installation
-
-1. **Prerequisites**
-
-   - Node.js (v16 or later)
-   - npm (v7 or later) or pnpm (v8 or later)
-   - Modern web browser (Chrome, Firefox, Safari, Edge)
-
-2. **Clone the repository**
-
-   ```bash
-   git clone https://github.com/printo/Image-Resizer.git
-   cd Image-Resizer
-   ```
-
-3. **Install dependencies**
-
-   ```bash
-   # Using npm
-   npm install
-
-   # Or using pnpm
-   pnpm install
-   ```
-
-4. **Start the development server**
-
-   ```bash
-   # Using npm
-   npm run dev
-
-   # Or using pnpm
-   pnpm dev
-   ```
-
-   The application will be available at `http://localhost:5173`
-
-## 🔧 Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-VITE_APP_NAME=Image Resizer
-VITE_API_BASE_URL=http://your-api-url.com
-# Add other environment variables as needed
-```
-
-## 🏗️ Project Structure
-
-```
-Image-Resizer/
-├── public/              # Static files
-├── src/
-│   ├── components/      # Reusable UI components
-│   │   ├── ui/          # shadcn/ui components
-│   │   ├── FileUpload.tsx
-│   │   ├── CSVPreview.tsx
-│   │   └── LoginPage.tsx
-│   ├── context/         # React context providers
-│   │   └── AuthContext.tsx
-│   ├── lib/             # Utility functions
-│   ├── utils/           # Helper utilities
-│   │   ├── auth.ts
-│   │   ├── csvParser.ts
-│   │   ├── fileValidation.ts
-│   │   ├── imageProcessor.ts
-│   │   └── zipGenerator.ts
-│   ├── App.tsx          # Main application component
-│   └── main.tsx         # Application entry point
-├── .eslintrc.json       # ESLint configuration
-├── .gitignore           # Git ignore file
-├── index.html           # HTML template
-├── package.json         # Project dependencies and scripts
-├── postcss.config.js    # PostCSS configuration
-├── tailwind.config.js   # Tailwind CSS configuration
-├── tsconfig.json        # TypeScript configuration
-└── vite.config.ts       # Vite configuration
-```
-
-## 📜 Available Scripts
-
-- `dev`: Start the development server
-  ```bash
-  npm run dev
-  ```
-- `build`: Build the application for production
-  ```bash
-  npm run build
-  ```
-- `preview`: Preview the production build locally
-  ```bash
-  npm run preview
-  ```
-- `lint`: Run ESLint to check code quality
-  ```bash
-  npm run lint
-  ```
-
-## 🚀 Deployment
-
-### Vercel (Recommended)
-
-1. Push your code to a GitHub, GitLab, or Bitbucket repository
-2. Import the repository to Vercel
-3. Configure the build settings:
-   - Build Command: `npm run build` or `pnpm build`
-   - Output Directory: `dist`
-   - Install Command: `npm install` or `pnpm install`
-4. Add environment variables if needed
-5. Deploy!
-
-### Netlify
-
-1. Push your code to a Git repository
-2. Create a new site in Netlify and link your repository
-3. Set the build command and publish directory:
-   - Build Command: `npm run build` or `pnpm build`
-   - Publish directory: `dist`
-4. Add environment variables in the site settings
-5. Deploy the site
-
-## 🧪 Testing
-
-To run tests, use the following command:
-
-```bash
-# Run tests
-npm test
-
-# Run tests in watch mode
-npm test -- --watch
-
-# Generate test coverage report
-npm test -- --coverage
-```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **Build Failures**
-
-   - Ensure all dependencies are installed: `npm install`
-   - Clear the cache: `rm -rf node_modules/.vite`
-   - Check for TypeScript errors: `npx tsc --noEmit`
-
-2. **Authentication Issues**
-
-   - Clear browser cookies for the application
-   - Ensure the authentication server is running and accessible
-
-3. **Image Processing Errors**
-   - Check the browser console for specific error messages
-   - Ensure images are in a supported format
-   - Verify CSV file format matches the expected structure
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a new branch: `git checkout -b feature/your-feature-name`
-3. Make your changes and commit them: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/your-feature-name`
-5. Open a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
-for details.
-
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact the
-maintainers.
-
-## 🙏 Acknowledgments
-
-- [Vite](https://vitejs.dev/) - Next Generation Frontend Tooling
-- [React](https://reactjs.org/) - A JavaScript library for building user
-  interfaces
-- [shadcn/ui](https://ui.shadcn.com/) - Beautifully designed components
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
-- [Lucide Icons](https://lucide.dev/) - Beautiful & consistent icon toolkit
-
 ## 🏗️ Architecture
 
 ### Frontend
@@ -262,32 +79,78 @@ processing happens in the user's browser using:
 - Processing time scales with image size and quantity
 - Modern browsers with hardware acceleration perform best
 
-## � Performance Benchmarks
+## 🛠️ Self-Hosting Setup
 
-### Typical Processing Times (on modern hardware)
+### Prerequisites
 
-- **10 images (2MB each)**: ~30 seconds
-- **50 images (5MB each)**: ~3-5 minutes
-- **100 images (10MB each)**: ~10-15 minutes
+- Node.js 18+ and npm/pnpm/yarn
+- Modern web browser for testing
 
-### Memory Usage
+### Installation
 
-- **Base app**: ~50MB
-- **Per image**: ~20-50MB during processing
-- **Large images (>20MB)**: Can use 100MB+ each
+1. **Clone the repository** \`\`\`bash git clone <repository-url> cd
+   image-resizer-app \`\`\`
+
+2. **Install dependencies** \`\`\`bash
+   # Using npm
+   npm install
+
+   # Using pnpm (recommended)
+   pnpm install
+
+   # Using yarn
+   yarn install \`\`\`
+
+3. **Start development server** \`\`\`bash
+   # Using npm
+   npm run dev
+
+   # Using pnpm
+   pnpm dev
+
+   # Using yarn
+   yarn dev \`\`\`
+
+4. **Open in browser** Navigate to `http://localhost:3000`
+
+### Production Build
+
+1. **Build the application** \`\`\`bash npm run build
+   # or
+   pnpm build
+   # or
+   yarn build \`\`\`
+
+2. **Preview production build** \`\`\`bash npm run preview
+   # or
+   pnpm preview
+   # or
+   yarn preview \`\`\`
+
+3. **Deploy static files** The `dist/` folder contains all static files ready
+   for deployment to any web server (Nginx, Apache, Vercel, Netlify, etc.)
+
+### Deployment Options
+
+#### Static Hosting (Recommended)
+
+- **Vercel**: `vercel --prod`
+- **Netlify**: Drag and drop `dist/` folder
+- **GitHub Pages**: Push `dist/` contents to gh-pages branch
+- **AWS S3**: Upload `dist/` contents to S3 bucket with static hosting
+
+#### Traditional Web Server
+
+- **Nginx**: Serve `dist/` folder as static content
+- **Apache**: Copy `dist/` contents to document root
+- **Docker**: Use nginx:alpine base image to serve static files
 
 ## 📝 Usage
 
 ### CSV Format
 
-Your CSV file must contain exactly 3 columns:
-
-```csv
-filename,length,width
-image1.jpg,8.5,11
-image2.png,4,6
-photo.jpeg,5,7
-```
+Your CSV file must contain exactly 3 columns: \`\`\`csv filename,length,width
+image1.jpg,8.5,11 image2.png,4,6 photo.jpeg,5,7 \`\`\`
 
 - **filename**: Exact filename as it appears in the ZIP
 - **length**: Height in inches (decimal values supported)
@@ -349,3 +212,37 @@ No environment variables required - the app runs entirely client-side.
 - Ensure exactly 3 columns: filename, length, width
 - Use decimal numbers for dimensions
 - Remove empty rows
+
+## 📊 Performance Benchmarks
+
+### Typical Processing Times (on modern hardware)
+
+- **10 images (2MB each)**: ~30 seconds
+- **50 images (5MB each)**: ~3-5 minutes
+- **100 images (10MB each)**: ~10-15 minutes
+
+### Memory Usage
+
+- **Base app**: ~50MB
+- **Per image**: ~20-50MB during processing
+- **Large images (>20MB)**: Can use 100MB+ each
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for
+details.
+
+## 🙏 Acknowledgments
+
+- [shadcn/ui](https://ui.shadcn.com/) for the beautiful UI components
+- [JSZip](https://stuk.github.io/jszip/) for ZIP file handling
+- [PapaParse](https://www.papaparse.com/) for CSV parsing
+- [Lucide](https://lucide.dev/) for the icon library
