@@ -17,7 +17,7 @@ export default defineConfig({
   build: {
     target: "esnext",
     minify: "terser",
-    sourcemap: true,
+    sourcemap: false,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -27,5 +27,8 @@ export default defineConfig({
       },
     },
     chunkSizeWarningLimit: 1000,
+  },
+  css: {
+    devSourcemap: false,
   },
 })
