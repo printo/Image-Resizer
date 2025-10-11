@@ -39,7 +39,11 @@ export class ImageProcessor {
     this.timeEstimator = new TimeEstimator()
   }
 
-  async processImages(zipFile: File, csvData: CSVRow[]): Promise<ProcessingResult> {
+  async processImages(
+    zipFile: File,
+    csvData: CSVRow[],
+    options?: { mode: "constrained" | "file" },
+  ): Promise<ProcessingResult> {
     const result: ProcessingResult = {
       success: false,
       processedImages: [],
@@ -103,7 +107,7 @@ export class ImageProcessor {
             continue
           }
 
-          const processedImage = await this.resizeImage(imageBlob, csvRow)
+          const processedImage = await this.resizeImage(imageBlob, csvRow, options)
           result.processedImages.push(processedImage)
 
           this.timeEstimator.recordItemCompletion()
@@ -133,15 +137,39 @@ export class ImageProcessor {
     return result
   }
 
-  private async resizeImage(imageBlob: Blob, csvRow: CSVRow): Promise<ProcessedImage> {
+  private async resizeImage(
+    imageBlob: Blob,
+    csvRow: CSVRow,
+    options?: { mode: "constrained" | "file" },
+  ): Promise<ProcessedImage> {
     return new Promise((resolve, reject) => {
       const img = new Image()
 
       img.onload = () => {
         try {
-          // Calculate target dimensions at 300 DPI
-          const targetWidth = Math.round(csvRow.width * 300)
-          const targetHeight = Math.round(csvRow.length * 300)
+          const dpi = 300
+          const requestedWidth = Math.round(csvRow.width * dpi)
+          const requestedHeight = Math.round(csvRow.length * dpi)
+
+          let targetWidth = requestedWidth
+          let targetHeight = requestedHeight
+
+          if (options?.mode === "constrained") {
+            // Use the smaller of the requested dimensions as the base
+            const base = Math.max(1, Math.min(requestedWidth, requestedHeight))
+            const aspect = img.width / img.height
+
+            if (aspect >= 1) {
+              // Landscape or square: width >= height -> set width to base
+              targetWidth = base
+              targetHeight = Math.max(1, Math.round(base / aspect))
+            } else {
+              // Portrait: height > width -> set height to base
+              targetHeight = base
+              targetWidth = Math.max(1, Math.round(base * aspect))
+            }
+          }
+          // else 'file' -> keep direct CSV W×H
 
           // Create canvas for resizing
           const canvas = document.createElement("canvas")
@@ -182,7 +210,7 @@ export class ImageProcessor {
             },
             "image/jpeg",
             0.95,
-          ) // High quality JPEG
+          )
         } catch (error) {
           reject(error)
         }
@@ -192,7 +220,6 @@ export class ImageProcessor {
         reject(new Error("Failed to load image"))
       }
 
-      // Set crossOrigin to handle CORS issues
       img.crossOrigin = "anonymous"
       img.src = URL.createObjectURL(imageBlob)
     })

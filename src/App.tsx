@@ -28,7 +28,7 @@ function AppContent() {
   const [zipProgress, setZipProgress] = useState<ZipGenerationProgress | null>(null)
   const [error, setError] = useState<string>("")
   const [tabProtectionActive, setTabProtectionActive] = useState(false)
-  const [resizeMode, setResizeMode] = useState<'constrained' | 'file'>('constrained');
+  const [resizeMode, setResizeMode] = useState<"constrained" | "file">("constrained")
 
   useEffect(() => {
     if (csvFile) {
@@ -81,7 +81,7 @@ function AppContent() {
         setProcessingProgress(progress)
       })
 
-      const result = await processor.processImages(zipFile, csvParseResult.data)
+      const result = await processor.processImages(zipFile, csvParseResult.data, { mode: resizeMode })
       setProcessingResult(result)
 
       if (!result.success && result.errors.length > 0) {
@@ -159,11 +159,8 @@ function AppContent() {
               >
                 Sign out
               </Button>
-
-
-
             </div>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto  text-center">
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto text-center">
               Upload a ZIP file containing images and a CSV file with resize specifications. We'll resize your images to
               the exact dimensions at 300 DPI.
             </p>
@@ -206,21 +203,19 @@ function AppContent() {
                 {/* Segmented Control / Choice Chips */}
                 <div className="inline-flex bg-gray-100 rounded-lg p-1 shadow-inner">
                   <button
-                    onClick={() => setResizeMode('constrained')}
+                    onClick={() => setResizeMode("constrained")}
                     className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      resizeMode === 'constrained'
-                        ? 'bg-white text-indigo-600 shadow-md'
-                        : 'text-gray-600 hover:text-gray-900'
+                      resizeMode === "constrained"
+                        ? "bg-white text-indigo-600 shadow-md"
+                        : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     Constrained Proportion
                   </button>
                   <button
-                    onClick={() => setResizeMode('file')}
+                    onClick={() => setResizeMode("file")}
                     className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      resizeMode === 'file'
-                        ? 'bg-white text-indigo-600 shadow-md'
-                        : 'text-gray-600 hover:text-gray-900'
+                      resizeMode === "file" ? "bg-white text-indigo-600 shadow-md" : "text-gray-600 hover:text-gray-900"
                     }`}
                   >
                     As Per CSV File
@@ -229,13 +224,15 @@ function AppContent() {
 
                 {/* Compact Description */}
                 <p className="text-xs text-gray-600 max-w-lg px-4">
-                  {resizeMode === 'constrained' ? (
+                  {resizeMode === "constrained" ? (
                     <>
-                      <span className="text-blue-600 font-medium">📐 Proportional:</span> Scales based on smallest dimension from csv in "Height or Width", maintains aspect ratio
+                      <span className="text-blue-600 font-medium">📐 Proportional:</span> Scales based on smallest
+                      dimension from csv in "Height or Width", maintains aspect ratio
                     </>
                   ) : (
                     <>
-                      <span className="text-amber-600 font-medium">⚠️ Exact size:</span> Uses actual "Height or Width" from CSV dimensions - may stretch or squish images
+                      <span className="text-amber-600 font-medium">⚠️ Exact size:</span> Uses actual "Height or Width"
+                      from CSV dimensions - may stretch or squish images
                     </>
                   )}
                 </p>
