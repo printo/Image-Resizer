@@ -28,6 +28,7 @@ function AppContent() {
   const [zipProgress, setZipProgress] = useState<ZipGenerationProgress | null>(null)
   const [error, setError] = useState<string>("")
   const [tabProtectionActive, setTabProtectionActive] = useState(false)
+  const [resizeMode, setResizeMode] = useState<'constrained' | 'file'>('constrained');
 
   useEffect(() => {
     if (csvFile) {
@@ -201,23 +202,63 @@ function AppContent() {
 
             {/* Process Button */}
             <div className="text-center mb-6">
-              <button
-                onClick={handleProcessImages}
-                disabled={!zipFile || !csvFile || !csvParseResult?.success || isProcessing}
-                className="inline-flex items-center px-8 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
-              >
-                {isProcessing ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    Processing...
-                  </>
-                ) : (
-                  <>
-                    <Download className="w-5 h-5 mr-2" />
-                    Resize Images
-                  </>
-                )}
-              </button>
+              <div className="flex flex-col items-center gap-3">
+                {/* Segmented Control / Choice Chips */}
+                <div className="inline-flex bg-gray-100 rounded-lg p-1 shadow-inner">
+                  <button
+                    onClick={() => setResizeMode('constrained')}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      resizeMode === 'constrained'
+                        ? 'bg-white text-indigo-600 shadow-md'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Constrained Proportion
+                  </button>
+                  <button
+                    onClick={() => setResizeMode('file')}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      resizeMode === 'file'
+                        ? 'bg-white text-indigo-600 shadow-md'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    As Per CSV File
+                  </button>
+                </div>
+
+                {/* Compact Description */}
+                <p className="text-xs text-gray-600 max-w-lg px-4">
+                  {resizeMode === 'constrained' ? (
+                    <>
+                      <span className="text-blue-600 font-medium">📐 Proportional:</span> Scales based on smallest dimension from csv in "Height or Width", maintains aspect ratio
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-amber-600 font-medium">⚠️ Exact size:</span> Uses actual "Height or Width" from CSV dimensions - may stretch or squish images
+                    </>
+                  )}
+                </p>
+
+                {/* Process Button */}
+                <button
+                  onClick={handleProcessImages}
+                  disabled={!zipFile || !csvFile || !csvParseResult?.success || isProcessing}
+                  className="inline-flex items-center px-8 py-3 bg-indigo-600 text-white text-lg font-semibold rounded-xl hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+                >
+                  {isProcessing ? (
+                    <>
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-5 h-5 mr-2" />
+                      Resize Images
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* CSV Format Info */}
