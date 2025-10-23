@@ -73,6 +73,7 @@
     "tsx": "latest",
     "url": "latest",
     "vaul": "latest",
+    "vue-router": "latest",
     "yaml": "latest",
     "zod": "^4.1.11"
   },
