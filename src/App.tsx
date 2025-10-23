@@ -28,12 +28,12 @@ function AppContent() {
   const [zipProgress, setZipProgress] = useState<ZipGenerationProgress | null>(null)
   const [error, setError] = useState<string>("")
   const [tabProtectionActive, setTabProtectionActive] = useState(false)
-  const [resizeMode, setResizeMode] = useState<"constrained" | "file" | "brand">("constrained")
+  const [resizeMode, setResizeMode] = useState<"constrained" | "file" | "brand">("brand")
 
   useEffect(() => {
     if (csvFile) {
       setIsCsvParsing(true)
-      parseCSV(csvFile)
+      parseCSV(csvFile, resizeMode)
         .then((result) => {
           setCsvParseResult(result)
           setIsCsvParsing(false)
@@ -51,7 +51,7 @@ function AppContent() {
     } else {
       setCsvParseResult(null)
     }
-  }, [csvFile])
+  }, [csvFile, resizeMode])
 
   if (!isAuthenticated) {
     return <LoginPage onLoginSuccess={login} />
@@ -169,14 +169,18 @@ function AppContent() {
           {/* Main Content */}
           <div className="bg-white rounded-2xl shadow-xl p-8">
             {/* File Upload Section */}
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 gap-6 mb-8 items-stretch">
               {/* ZIP File Upload */}
               <FileUpload
                 accept=".zip"
                 onFileSelect={setZipFile}
                 selectedFile={zipFile}
                 title="Upload ZIP File"
-                description="Select a ZIP file containing your images"
+                description={
+                  resizeMode === "brand"
+                    ? "Select a ZIP file with 3 images: Original, Full Black, Full White"
+                    : "Select a ZIP file containing your images"
+                }
                 icon={<Archive className="w-12 h-12 text-gray-400" />}
                 color="blue"
               />
@@ -187,7 +191,11 @@ function AppContent() {
                 onFileSelect={setCsvFile}
                 selectedFile={csvFile}
                 title="Upload CSV File"
-                description="CSV with: filename, length (in), width (in)"
+                description={
+                  resizeMode === "brand"
+                    ? "CSV with: product name, length (in), width (in), image variant"
+                    : "CSV with: filename, length (in), width (in)"
+                }
                 icon={<FileSpreadsheet className="w-12 h-12 text-gray-400" />}
                 color="green"
               />
@@ -204,26 +212,29 @@ function AppContent() {
                 <div className="inline-flex bg-gray-100 rounded-lg p-1 shadow-inner">
                   <button
                     onClick={() => setResizeMode("brand")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "brand"
-                      ? "bg-white text-indigo-600 shadow-md"
-                      : "text-gray-600 hover:text-gray-900"
-                      }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      resizeMode === "brand"
+                        ? "bg-white text-indigo-600 shadow-md"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
                   >
                     Brand Store Files
                   </button>
                   <button
                     onClick={() => setResizeMode("constrained")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "constrained"
-                      ? "bg-white text-indigo-600 shadow-md"
-                      : "text-gray-600 hover:text-gray-900"
-                      }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      resizeMode === "constrained"
+                        ? "bg-white text-indigo-600 shadow-md"
+                        : "text-gray-600 hover:text-gray-900"
+                    }`}
                   >
                     Constrained Proportion
                   </button>
                   <button
                     onClick={() => setResizeMode("file")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "file" ? "bg-white text-indigo-600 shadow-md" : "text-gray-600 hover:text-gray-900"
-                      }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                      resizeMode === "file" ? "bg-white text-indigo-600 shadow-md" : "text-gray-600 hover:text-gray-900"
+                    }`}
                   >
                     As Per CSV File
                   </button>
@@ -238,8 +249,9 @@ function AppContent() {
                     </>
                   ) : resizeMode === "brand" ? (
                     <>
-                      <span className="text-blue-600 font-medium">📐 Proportional:</span> Scales based on smallest
-                      dimension from csv in "Height or Width", maintains aspect ratio and you only need to upload only three types of files. (original, black and white logo files)
+                      <span className="text-blue-600 font-medium">📐 Brand Mode:</span> Upload 3 image variants
+                      (Original, Full Black, Full White). CSV specifies which variant to use for each product. Maintains
+                      aspect ratio and saves with product name.
                     </>
                   ) : (
                     <>
@@ -274,11 +286,36 @@ function AppContent() {
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
               <h4 className="font-semibold text-blue-900 mb-2">Requirements:</h4>
               <div className="text-sm text-blue-800">
-                <p className="mb-1">• Column 1: Image filename with extension (e.g., "photo1.jpg") - case sensitive</p>
-                <p className="mb-1">• Column 2: Height in inches (e.g., "8.5")</p>
-                <p className="mb-1">• Column 3: Width in inches (e.g., "11")</p>
-                <p className="mb-1">• ZIP file must contain exact filenames as listed in Column 1</p>
-                <p className="text-xs text-blue-600 mt-2">All images will be resized to 300 DPI • Max 5MB per image</p>
+                {resizeMode === "brand" ? (
+                  <>
+                    <p className="mb-1">• Column 1: Product name (e.g., "Supreme Laptop Bag")</p>
+                    <p className="mb-1">• Column 2: Length in inches (e.g., "4")</p>
+                    <p className="mb-1">• Column 3: Width in inches (e.g., "3")</p>
+                    <p className="mb-1">
+                      • Column 4: Image variant - must be one of: "Original", "Full Black", "Full White"
+                    </p>
+                    <p className="mb-1">
+                      • ZIP file must contain exactly 3 images named: "Original", "Full Black", "Full White" (with image
+                      extensions)
+                    </p>
+                    <p className="text-xs text-blue-600 mt-2">
+                      Output files will be named with product names • All images resized to 300 DPI • Maintains aspect
+                      ratio
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="mb-1">
+                      • Column 1: Image filename with extension (e.g., "photo1.jpg") - case sensitive
+                    </p>
+                    <p className="mb-1">• Column 2: Height in inches (e.g., "8.5")</p>
+                    <p className="mb-1">• Column 3: Width in inches (e.g., "11")</p>
+                    <p className="mb-1">• ZIP file must contain exact filenames as listed in Column 1</p>
+                    <p className="text-xs text-blue-600 mt-2">
+                      All images will be resized to 300 DPI • Max 5MB per image
+                    </p>
+                  </>
+                )}
               </div>
             </div>
 

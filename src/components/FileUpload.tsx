@@ -113,13 +113,13 @@ export function FileUpload({ accept, onFileSelect, selectedFile, title, descript
   return (
     <div className="space-y-3">
       <div
-        className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 ${colorClasses[color].border} hover:border-${color}-400`}
+        className={`border-2 border-dashed rounded-xl p-6 text-center transition-all duration-200 min-h-48 flex flex-col items-center justify-center ${colorClasses[color].border} hover:border-${color}-400`}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         {selectedFile ? (
-          <div className="space-y-4">
+          <div className="space-y-4 w-full">
             <div className="flex items-center justify-center">
               <CheckCircle className={`w-12 h-12 ${colorClasses[color].text}`} />
             </div>

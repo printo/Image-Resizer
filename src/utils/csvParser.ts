@@ -14,13 +14,13 @@ export interface CSVValidationError {
   message: string
 }
 
-export function parseCSV(file: File): Promise<CSVParseResult> {
+export function parseCSV(file: File, mode?: "constrained" | "file" | "brand"): Promise<CSVParseResult> {
   return new Promise((resolve) => {
     Papa.parse(file, {
       header: false,
       skipEmptyLines: true,
       complete: (results) => {
-        const parseResult = validateAndProcessCSV(results.data as string[][])
+        const parseResult = validateAndProcessCSV(results.data as string[][], mode)
         resolve(parseResult)
       },
       error: (error) => {
@@ -35,7 +35,7 @@ export function parseCSV(file: File): Promise<CSVParseResult> {
   })
 }
 
-function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
+function validateAndProcessCSV(rawData: string[][], mode?: "constrained" | "file" | "brand"): CSVParseResult {
   const errors: string[] = []
   const warnings: string[] = []
   const validRows: CSVRow[] = []
@@ -57,6 +57,7 @@ function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
     firstRow.length >= 3 &&
     (firstRow[0].toLowerCase().includes("filename") ||
       firstRow[0].toLowerCase().includes("name") ||
+      firstRow[0].toLowerCase().includes("product") ||
       firstRow[1].toLowerCase().includes("length") ||
       firstRow[1].toLowerCase().includes("width"))
   ) {
@@ -69,26 +70,50 @@ function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
     const row = rawData[i]
     const rowNumber = i + 1
 
-    // Check column count
-    if (row.length < 3) {
-      errors.push(`Row ${rowNumber}: Missing columns (expected 3: filename, length, width)`)
+    const expectedColumns = mode === "brand" ? 4 : 3
+    if (row.length < expectedColumns) {
+      errors.push(
+        `Row ${rowNumber}: Missing columns (expected ${expectedColumns}: ${mode === "brand" ? "product name, length, width, image variant" : "filename, length, width"})`,
+      )
       continue
     }
 
-    const [filename, lengthStr, widthStr] = row.map((cell) => cell.trim())
+    let filename: string
+    let lengthStr: string
+    let widthStr: string
+    let productName: string | undefined
+    let imageVariant: string | undefined
 
-    // Validate filename
+    if (mode === "brand") {
+      ;[productName, lengthStr, widthStr, imageVariant] = row.map((cell) => cell.trim())
+      filename = `${productName}_${imageVariant}`
+    } else {
+      // Standard format: filename, length, width
+      ;[filename, lengthStr, widthStr] = row.map((cell) => cell.trim())
+    }
+
+    // Validate filename/product name
     if (!filename) {
-      errors.push(`Row ${rowNumber}: Filename cannot be empty`)
+      errors.push(`Row ${rowNumber}: ${mode === "brand" ? "Product name" : "Filename"} cannot be empty`)
       continue
     }
 
-    // Check if filename has valid image extension
-    const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"]
-    const hasValidExtension = validExtensions.some((ext) => filename.toLowerCase().endsWith(ext))
+    if (mode === "brand") {
+      const validVariants = ["Original", "Full Black", "Full White"]
+      if (!imageVariant || !validVariants.includes(imageVariant)) {
+        errors.push(
+          `Row ${rowNumber}: Image variant must be one of: ${validVariants.join(", ")} (got "${imageVariant}")`,
+        )
+        continue
+      }
+    } else {
+      // Check if filename has valid image extension
+      const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"]
+      const hasValidExtension = validExtensions.some((ext) => filename.toLowerCase().endsWith(ext))
 
-    if (!hasValidExtension) {
-      warnings.push(`Row ${rowNumber}: "${filename}" may not be a valid image file`)
+      if (!hasValidExtension) {
+        warnings.push(`Row ${rowNumber}: "${filename}" may not be a valid image file`)
+      }
     }
 
     // Validate length
@@ -115,9 +140,10 @@ function validateAndProcessCSV(rawData: string[][]): CSVParseResult {
 
     // Add valid row
     validRows.push({
-      filename,
+      filename: mode === "brand" ? `${imageVariant}` : filename,
       length,
       width,
+      ...(mode === "brand" && { productName, imageVariant }),
     })
   }
 

@@ -79,11 +79,24 @@ export class ImageProcessor {
         this.updateProgress(`Processing ${csvRow.filename}...`, i + 1, csvData.length, progress, timeEstimate)
 
         try {
-          const imageFile = imageFiles.get(csvRow.filename.toLowerCase())
+          let imageFile: JSZip.JSZipObject | undefined
+          if (options?.mode === "brand" && csvRow.imageVariant) {
+            // Try to find the image file with the variant name
+            const variantName = csvRow.imageVariant.toLowerCase().replace(/\s+/g, "_")
+            imageFile = Array.from(imageFiles.values()).find((file) => {
+              const fileName = file.name.toLowerCase()
+              return fileName.includes(variantName)
+            })
+          } else {
+            imageFile = imageFiles.get(csvRow.filename.toLowerCase())
+          }
 
           if (!imageFile) {
-            result.skippedFiles.push(csvRow.filename)
-            result.errors.push(`Image not found in ZIP: ${csvRow.filename}`)
+            const searchTerm = options?.mode === "brand" ? csvRow.imageVariant : csvRow.filename
+            result.skippedFiles.push(searchTerm || "unknown")
+            result.errors.push(
+              `Image not found in ZIP: ${options?.mode === "brand" ? `${csvRow.productName} (${csvRow.imageVariant})` : csvRow.filename}`,
+            )
             this.timeEstimator.recordItemCompletion()
             continue
           }
@@ -198,8 +211,11 @@ export class ImageProcessor {
                 return
               }
 
+              const outputFilename =
+                options?.mode === "brand" && csvRow.productName ? `${csvRow.productName}.jpg` : csvRow.filename
+
               resolve({
-                filename: csvRow.filename,
+                filename: outputFilename,
                 originalSize: { width: img.width, height: img.height },
                 targetSize: { width: targetWidth, height: targetHeight },
                 blob,
