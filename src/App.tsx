@@ -14,6 +14,7 @@ import { ImageProcessor, type ProcessingProgress, type ProcessingResult } from "
 import { ZipGenerator, type ZipGenerationProgress, downloadBlob, generateDownloadFilename } from "./utils/zipGenerator"
 import { formatTime } from "./utils/timeEstimator"
 import { tabKeepAlive } from "./utils/tabKeepAlive"
+import { AuthProvider } from "@/context/AuthContext"
 
 function AppContent() {
   const { isAuthenticated, login, logout } = useAuth()
@@ -418,10 +419,12 @@ function AppContent() {
 
 function App() {
   return (
-    <>
-      <AppContent />
-      <Toaster />
-    </>
+    <AuthProvider>
+      <>
+        <AppContent />
+        <Toaster />
+      </>
+    </AuthProvider>
   )
 }
 
