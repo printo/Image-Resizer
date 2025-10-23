@@ -14,8 +14,6 @@ import { ImageProcessor, type ProcessingProgress, type ProcessingResult } from "
 import { ZipGenerator, type ZipGenerationProgress, downloadBlob, generateDownloadFilename } from "./utils/zipGenerator"
 import { formatTime } from "./utils/timeEstimator"
 import { tabKeepAlive } from "./utils/tabKeepAlive"
-import { AuthProvider } from "@/context/AuthContext"
-
 function AppContent() {
   const { isAuthenticated, login, logout } = useAuth()
   const [zipFile, setZipFile] = useState<File | null>(null)
@@ -213,29 +211,26 @@ function AppContent() {
                 <div className="inline-flex bg-gray-100 rounded-lg p-1 shadow-inner">
                   <button
                     onClick={() => setResizeMode("brand")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      resizeMode === "brand"
-                        ? "bg-white text-indigo-600 shadow-md"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "brand"
+                      ? "bg-white text-indigo-600 shadow-md"
+                      : "text-gray-600 hover:text-gray-900"
+                      }`}
                   >
                     Brand Store Files
                   </button>
                   <button
                     onClick={() => setResizeMode("constrained")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      resizeMode === "constrained"
-                        ? "bg-white text-indigo-600 shadow-md"
-                        : "text-gray-600 hover:text-gray-900"
-                    }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "constrained"
+                      ? "bg-white text-indigo-600 shadow-md"
+                      : "text-gray-600 hover:text-gray-900"
+                      }`}
                   >
                     Constrained Proportion
                   </button>
                   <button
                     onClick={() => setResizeMode("file")}
-                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                      resizeMode === "file" ? "bg-white text-indigo-600 shadow-md" : "text-gray-600 hover:text-gray-900"
-                    }`}
+                    className={`px-5 py-2 rounded-md text-sm font-medium transition-all duration-200 ${resizeMode === "file" ? "bg-white text-indigo-600 shadow-md" : "text-gray-600 hover:text-gray-900"
+                      }`}
                   >
                     As Per CSV File
                   </button>
@@ -419,12 +414,10 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <>
-        <AppContent />
-        <Toaster />
-      </>
-    </AuthProvider>
+    <>
+      <AppContent />
+      <Toaster />
+    </>
   )
 }
 
