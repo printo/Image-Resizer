@@ -42,7 +42,7 @@ export class ImageProcessor {
   async processImages(
     zipFile: File,
     csvData: CSVRow[],
-    options?: { mode: "constrained" | "file" },
+    options?: { mode: "constrained" | "file" | "brand" },
   ): Promise<ProcessingResult> {
     const result: ProcessingResult = {
       success: false,
@@ -140,7 +140,7 @@ export class ImageProcessor {
   private async resizeImage(
     imageBlob: Blob,
     csvRow: CSVRow,
-    options?: { mode: "constrained" | "file" },
+    options?: { mode: "constrained" | "file" | "brand" },
   ): Promise<ProcessedImage> {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -154,7 +154,7 @@ export class ImageProcessor {
           let targetWidth = requestedWidth
           let targetHeight = requestedHeight
 
-          if (options?.mode === "constrained") {
+          if (options?.mode === "constrained" || options?.mode === "brand") {
             // Use the smaller of the requested dimensions as the base
             const base = Math.max(1, Math.min(requestedWidth, requestedHeight))
             const aspect = img.width / img.height
