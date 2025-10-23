@@ -19,17 +19,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const geistSans = GeistSans
-  const geistMono = GeistMono
-
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="en">
       <head>
         <style>{`
 html {
-  font-family: ${geistSans.style.fontFamily};
-  --font-sans: ${geistSans.variable};
-  --font-mono: ${geistMono.variable};
+  font-family: ${GeistSans.style.fontFamily};
+  --font-sans: ${GeistSans.variable};
+  --font-mono: ${GeistMono.variable};
 }
         `}</style>
       </head>
