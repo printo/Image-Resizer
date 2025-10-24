@@ -92,9 +92,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: latest
         version: 1.2.8(@types/react-dom@19.0.0)(@types/react@19.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@vercel/analytics':
-        specifier: latest
-        version: 1.5.0(next@16.0.0(@babel/core@7.28.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react@19.2.0)(vue-router@4.6.3(vue@3.5.22(typescript@5.0.2)))(vue@3.5.22(typescript@5.0.2))
       '@vercel/speed-insights':
         specifier: latest
         version: 1.2.0(next@16.0.0(@babel/core@7.28.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react@19.2.0)(vue-router@4.6.3(vue@3.5.22(typescript@5.0.2)))(vue@3.5.22(typescript@5.0.2))
@@ -1864,32 +1861,6 @@ packages:
   '@typescript-eslint/visitor-keys@6.0.0':
     resolution: {integrity: sha512-cvJ63l8c0yXdeT5POHpL0Q1cZoRcmRKFCtSjNGJxPkcP571EfZMcNbzWAc7oK3D1dRzm/V5EwtkANTZxqvuuUA==}
     engines: {node: ^16.0.0 || >=18.0.0}
-
-  '@vercel/analytics@1.5.0':
-    resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
-    peerDependencies:
-      '@remix-run/react': ^2
-      '@sveltejs/kit': ^1 || ^2
-      next: '>= 13'
-      react: ^18 || ^19 || ^19.0.0-rc
-      svelte: '>= 4'
-      vue: ^3
-      vue-router: ^4
-    peerDependenciesMeta:
-      '@remix-run/react':
-        optional: true
-      '@sveltejs/kit':
-        optional: true
-      next:
-        optional: true
-      react:
-        optional: true
-      svelte:
-        optional: true
-      vue:
-        optional: true
-      vue-router:
-        optional: true
 
   '@vercel/speed-insights@1.2.0':
     resolution: {integrity: sha512-y9GVzrUJ2xmgtQlzFP2KhVRoCglwfRQgjyfY607aU0hh0Un6d0OUyrJkjuAlsV18qR4zfoFPs/BiIj9YDS6Wzw==}
@@ -5060,13 +5031,6 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 6.0.0
       eslint-visitor-keys: 3.4.3
-
-  '@vercel/analytics@1.5.0(next@16.0.0(@babel/core@7.28.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react@19.2.0)(vue-router@4.6.3(vue@3.5.22(typescript@5.0.2)))(vue@3.5.22(typescript@5.0.2))':
-    optionalDependencies:
-      next: 16.0.0(@babel/core@7.28.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2)
-      react: 19.2.0
-      vue: 3.5.22(typescript@5.0.2)
-      vue-router: 4.6.3(vue@3.5.22(typescript@5.0.2))
 
   '@vercel/speed-insights@1.2.0(next@16.0.0(@babel/core@7.28.3)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(sass@1.93.2))(react@19.2.0)(vue-router@4.6.3(vue@3.5.22(typescript@5.0.2)))(vue@3.5.22(typescript@5.0.2))':
     optionalDependencies:
