@@ -78,18 +78,25 @@ function AppContent() {
       await tabKeepAlive.start()
       setTabProtectionActive(true)
 
+      console.log("[v0] Starting image processing with mode:", resizeMode)
+
       const processor = new ImageProcessor((progress) => {
         setProcessingProgress(progress)
       })
 
-      const result = await processor.processImages(zipFile, csvParseResult.data, { mode: resizeMode }) // Process images with selected mode
+      const result = await processor.processImages(zipFile, csvParseResult.data, { mode: resizeMode })
+
+      console.log("[v0] Processing result:", result)
+
       setProcessingResult(result)
 
       if (!result.success && result.errors.length > 0) {
         setError("Some images failed to process. Check the detailed results below.")
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred during processing")
+      const errorMsg = err instanceof Error ? err.message : "An error occurred during processing"
+      console.error("[v0] Processing error:", err)
+      setError(errorMsg)
     } finally {
       setIsProcessing(false)
       setProcessingProgress(null)

@@ -126,6 +126,7 @@ export class ImageProcessor {
           this.timeEstimator.recordItemCompletion()
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : "Unknown error"
+          console.error("[v0] Image processing error:", errorMessage, csvRow)
           result.errors.push(`Failed to process ${csvRow.filename}: ${errorMessage}`)
           result.processedImages.push({
             filename: csvRow.filename,
@@ -144,6 +145,7 @@ export class ImageProcessor {
       result.success = result.processedImages.some((img) => img.success)
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown error"
+      console.error("[v0] ZIP processing error:", errorMessage)
       result.errors.push(`Failed to process ZIP file: ${errorMessage}`)
     }
 
@@ -157,9 +159,14 @@ export class ImageProcessor {
   ): Promise<ProcessedImage> {
     return new Promise((resolve, reject) => {
       const img = new Image()
+      let blobUrl: string | null = null
 
       img.onload = () => {
         try {
+          if (blobUrl) {
+            URL.revokeObjectURL(blobUrl)
+          }
+
           const dpi = 300
           const requestedWidth = Math.round(csvRow.width * dpi)
           const requestedHeight = Math.round(csvRow.length * dpi)
@@ -233,11 +240,15 @@ export class ImageProcessor {
       }
 
       img.onerror = () => {
+        if (blobUrl) {
+          URL.revokeObjectURL(blobUrl)
+        }
         reject(new Error("Failed to load image"))
       }
 
       img.crossOrigin = "anonymous"
-      img.src = URL.createObjectURL(imageBlob)
+      blobUrl = URL.createObjectURL(imageBlob)
+      img.src = blobUrl
     })
   }
 
